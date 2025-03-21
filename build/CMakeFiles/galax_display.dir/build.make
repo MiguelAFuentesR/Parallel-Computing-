@@ -140,11 +140,6 @@ libgalax_display.so: CMakeFiles/galax_display.dir/src/Display/Display_SDL2/Displ
 libgalax_display.so: CMakeFiles/galax_display.dir/src/Display/Display_NO/Display_NO.cpp.o
 libgalax_display.so: CMakeFiles/galax_display.dir/src/Particles.cpp.o
 libgalax_display.so: CMakeFiles/galax_display.dir/build.make
-libgalax_display.so: /usr/lib/x86_64-linux-gnu/libOpenGL.so
-libgalax_display.so: /usr/lib/x86_64-linux-gnu/libGLX.so
-libgalax_display.so: /usr/lib/x86_64-linux-gnu/libGLU.so
-libgalax_display.so: /usr/lib/x86_64-linux-gnu/libGLEW.so
-libgalax_display.so: /usr/lib/x86_64-linux-gnu/libSDL2.so
 libgalax_display.so: CMakeFiles/galax_display.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/homes/r23benmu/Bureau/shared_galax/Parallel-Computing-/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX shared library libgalax_display.so"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/galax_display.dir/link.txt --verbose=$(VERBOSE)

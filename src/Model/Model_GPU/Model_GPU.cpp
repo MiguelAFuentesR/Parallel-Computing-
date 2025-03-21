@@ -69,8 +69,16 @@ Model_GPU
 	}
 
 	cuda_malloc((void**)&positionsGPU,     n_particles * sizeof(float3));
+	cuda_malloc((void**)&velocitiesGPU,     n_particles * sizeof(float3));
+	cuda_malloc((void**)&accelerationsGPU,     n_particles * sizeof(float3));
+	cuda_malloc((void**)&massesGPU,     n_particles * sizeof(float));
 
 	cuda_memcpy(positionsGPU,  positionsf3.data()     , n_particles * sizeof(float3), cudaMemcpyHostToDevice);
+	cuda_memcpy(velocitiesGPU,  velocitiesf3.data()     , n_particles * sizeof(float3), cudaMemcpyHostToDevice);
+	cuda_memcpy(accelerationsGPU,  accelerationsf3.data()     , n_particles * sizeof(float3), cudaMemcpyHostToDevice);
+	cuda_memcpy(massesGPU,  initstate.masses.data()    , n_particles * sizeof(float), cudaMemcpyHostToDevice);
+
+	
 }
 
 Model_GPU
@@ -82,7 +90,13 @@ Model_GPU
 void Model_GPU
 ::step()
 {
+	cuda_memcpy(accelerationsGPU,  accelerationsf3.data()     , n_particles * sizeof(float3), cudaMemcpyHostToDevice);
+    
+	update_position_gpu( positionsGPU, velocitiesGPU,  accelerationsGPU,  massesGPU, n_particles);
+	
 	cuda_memcpy(positionsf3.data(), positionsGPU, n_particles * sizeof(float3), cudaMemcpyDeviceToHost);
+
+	
 	for (int i = 0; i < n_particles; i++)
 	{
 		particles.x[i] = positionsf3[i].x;

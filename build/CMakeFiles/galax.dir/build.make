@@ -189,11 +189,6 @@ bin/galax: CMakeFiles/galax.dir/src/Timing/Timing.cpp.o
 bin/galax: CMakeFiles/galax.dir/src/main.cpp.o
 bin/galax: CMakeFiles/galax.dir/build.make
 bin/galax: libgalax_display.so
-bin/galax: /usr/lib/x86_64-linux-gnu/libOpenGL.so
-bin/galax: /usr/lib/x86_64-linux-gnu/libGLX.so
-bin/galax: /usr/lib/x86_64-linux-gnu/libGLU.so
-bin/galax: /usr/lib/x86_64-linux-gnu/libGLEW.so
-bin/galax: /usr/lib/x86_64-linux-gnu/libSDL2.so
 bin/galax: /usr/lib/gcc/x86_64-linux-gnu/13/libgomp.so
 bin/galax: /usr/lib/x86_64-linux-gnu/libpthread.a
 bin/galax: CMakeFiles/galax.dir/link.txt

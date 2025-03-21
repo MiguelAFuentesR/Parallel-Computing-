@@ -111,6 +111,9 @@ Provided a software platform with a working version of the CUDA toolkit, it is a
     ./bin/galax -c GPU # use GPU version
 ```
 
+
+
+
 ### Validating your results
 
 To check that the particles positions computed from your code are in agreement with the reference (slow) model, use the `--validate` option. For instance
@@ -119,3 +122,26 @@ To check that the particles positions computed from your code are in agreement w
 ```
 will compare the positions of the `CPU` and `CPU_FAST` models at each step.
 
+
+
+
+
+
+
+
+Remarque jeudi 20 :
+
+on a traiter la partie gpu :
+
+etape : 
+- allocation de mémoire coté gpu
+- tranfert de donner vers le gpu (acceleration, velocité, position )
+- appel de la fonction update_position_cu
+- coimlpleter les deux fonction 
+- renvoi les donner vers le cpu pour qu elle soit afficher 
+
+
+probleme : 
+- la gestion de depassement de calcul (index i depasse le nobre de particule ) elle a cause un erreur importatnce 
+
+resultat : 

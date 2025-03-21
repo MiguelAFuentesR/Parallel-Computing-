@@ -28,38 +28,44 @@ void Model_CPU_fast
 
 
 
-
-
-
-
-
-
 //OMP  version
-#pragma omp parallel for schedule(static)
-    for (int i = 0; i < n_particles; i++) {
-        #pragma omp parallel for schedule(static)
-        for (int j = 0; j < n_particles; j++) {
+
+
+    for (int i = 0; i < n_particles;  i += b_type::size) {
+        for (int j = 0; j < n_particles;  j += b_type::size) {
             if(i != j)
 			{
-				const float diffx = particles.x[j] - particles.x[i];
-				const float diffy = particles.y[j] - particles.y[i];
-				const float diffz = particles.z[j] - particles.z[i];
+	
+				b_type rposx_i  = b_type::load_unaligned(&particles.x[i]);
+				b_type rposy_i = b_type::load_unaligned(&particles.y[i]);
+	 			b_type rposz_i  = b_type::load_unaligned(&particles.z[i]);
+				b_type rposx_j  = b_type::load_unaligned(&particles.x[i]);
+				b_type rposy_j = b_type::load_unaligned(&particles.y[i]);
+				b_type rposz_j  = b_type::load_unaligned(&particles.z[i]);
+                b_type masses_j  = b_type::load_unaligned(&initstate.masses[j]);
+				b_type raccx_i = b_type::load_unaligned(&accelerationsx[i]);
+				b_type raccy_i = b_type::load_unaligned(&accelerationsy[i]);
+				b_type raccz_i = b_type::load_unaligned(&accelerationsz[i]);
+               
+				b_type diffx,diffy,diffz,dij;
+				diffx = rposx_j-rposx_i;
+				diffy = rposy_j-rposy_i;
+				diffz = rposz_j-rposz_i;
+				
 
-				float dij = diffx * diffx + diffy * diffy + diffz * diffz;
+				dij = diffx * diffx + diffy * diffy + diffz * diffz;
 
-				if (dij < 1.0)
-				{
-					dij = 10.0;
-				}
-				else
-				{
-					dij = std::sqrt(dij);
-					dij = 10.0 / (dij * dij * dij);
-				}
+				dij = select(dij < 1.0 , dij = b_type(10.0),  
+					b_type(10.0 * ( xs::rsqrt(dij) *  xs::rsqrt(dij) *  xs::rsqrt(dij))  )  );
 
-				accelerationsx[i] += diffx * dij * initstate.masses[j];
-				accelerationsy[i] += diffy * dij * initstate.masses[j];
-				accelerationsz[i] += diffz * dij * initstate.masses[j];
+
+				raccx_i += diffx * dij *masses_j;
+				raccy_i += diffy * dij * masses_j;
+				raccz_i += diffz * dij * masses_j;
+				raccx_i.store_unaligned(&accelerationsx[i]);
+				raccy_i.store_unaligned(&accelerationsy[i]);
+				raccz_i.store_unaligned(&accelerationsz[i]);
+
 			}
         }
     }
@@ -67,7 +73,6 @@ void Model_CPU_fast
    
 
 	//OMP + xsimd version
-#pragma omp parallel for
 for (int i = 0; i < n_particles; i += b_type::size)
 {
 	// load registers body i
@@ -96,12 +101,11 @@ for (int i = 0; i < n_particles; i += b_type::size)
 	rvelx_i.store_unaligned(&velocitiesx[i]);
 	rvely_i.store_unaligned(&velocitiesy[i]);
 	rvelz_i.store_unaligned(&velocitiesz[i]);
-
-
-     
+	
 
 }
-/*   	
+/**
+  	
   #pragma omp parallel for
   for (int i = 0; i < n_particles; i++)
   {
@@ -111,8 +115,8 @@ for (int i = 0; i < n_particles; i += b_type::size)
 		  particles.x[i] += velocitiesx   [i] * 0.1f;
 		  particles.y[i] += velocitiesy   [i] * 0.1f;
 		  particles.z[i] += velocitiesz   [i] * 0.1f;
-  }  */
-
+  }  
+*/
 }
 
 #endif // GALAX_MODEL_CPU_FAST

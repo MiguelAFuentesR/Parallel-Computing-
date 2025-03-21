@@ -11,7 +11,7 @@ BuildDirectory: /homes/r23benmu/Bureau/shared_galax/Parallel-Computing-/build/li
 CostDataFile: 
 
 # Site is something like machine.domain, i.e. pragmatic.crd
-Site: fl-tp-br-638
+Site: fl-tp-br-042
 
 # Build name is osname-revision-compiler, i.e. Linux-2.4.2-2smp-c++
 BuildName: Linux-c++
